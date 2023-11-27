@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  mqtt-broker-1:
+    image: eclipse-mosquitto
+    container_name: mqtt-broker-1
+    ports:
+      - "1883:1883"
+
+  mqtt-broker-2:
+    image: eclipse-mosquitto
+    container_name: mqtt-broker-2
+    ports:
+      - "1884:1883"
+
+  mqtt-publisher:
+    build:
+      context: .
+      dockerfile: Dockerfile_publisher
+    container_name: mqtt-publisher
+    depends_on:
+      - mqtt-broker-1
+
+  mqtt-subscriber:
+    build:
+      context: .
+      dockerfile: Dockerfile_subscriber
+    container_name: mqtt-subscriber
+    depends_on:
+      - mqtt-broker-2
